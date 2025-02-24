@@ -50,9 +50,9 @@ namespace my_another_mvc_web_app.Controllers
                 return BadRequest("Invalid Password");
             }
 
-            string token = "Success";
+            string token = "Success as a token";
 
-            return Ok(user);
+            return Ok(token);
         }
     }
 }

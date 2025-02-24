@@ -1,5 +1,9 @@
 # my-another-mvc-web-app
 
+## 24feb25_136pm - swagger on app's root url
+- swagger is configured to To serve the Swagger UI at the app's root on `https://localhost:7211/`
+- returned success as token in `login` endpoint.
+
 ## 24feb25_1237pm - UserDbContext Migration and api not being hit issue solved
 - created `UserDbContext` with primary constructor and added dummy data for seeding with `OnModelCreating` method.
 - Done data migration for new User DB and resolved migration errror as having multiple db context within same project.
@@ -104,10 +108,10 @@ builder.Services.AddDbContext<SchoolContext>(options =>
         add-migration “InitialDbSeup”
         ```
 ## Step 8: Update the database
-    - Now to Apply the pending migrations to the database, effectively updating the database schema to match the current model as defined by your migrations.
-        ```
-        update-database
-        ```
+- Now to Apply the pending migrations to the database, effectively updating the database schema to match the current model as defined by your migrations.
+    ```
+    update-database
+    ```
 
 ### Your database is created under `Databases` tree of `Microsoft SQL Server Mgmt Studio`.
 
