@@ -1,7 +1,21 @@
 # my-another-mvc-web-app
 
+## 24feb25_1237pm - UserDbContext Migration and api not being hit issue solved
+- created `UserDbContext` with primary constructor and added dummy data for seeding with `OnModelCreating` method.
+- Done data migration for new User DB and resolved migration errror as having multiple db context within same project.
+- configured connection string for `UserDb` in `appsettings.json` file.
+- 📌Note :
+    - make sure you have `modelBuilder.Entity<User>().HasKey(u => u.Username);` if your model class dont have primary key before running migration.
 
-# 21feb25 - Configured Swagger Support in dotnet 8
+- `add-migration initial_users_data_seeding -context UserDbContext`
+- `update database -context UserDbContext`
+- completed register and login endpoint for Auth Controller.
+- added below line in `Program.cs` file to solve my api controller is not being hit from swagger
+```
+app.MapControllers();
+```
+
+## 21feb25 - Configured Swagger Support in dotnet 8
 actually swagger in this project is messed up as i have used this project for MVC stuff too. :(
 - added `Swashbuckle.AspNetCore` nuget package by
 ```

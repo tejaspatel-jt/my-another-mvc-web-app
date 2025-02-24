@@ -9,29 +9,34 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-/*tejas - start*/
+/* tejas - START */
 
 //builder.Services.AddOpenApi(); // won't work as its only compatible with .net 9+
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<SchoolContext>(options => 
-{
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("MvcSchoolContext"))
-    //options.UseSqlServer("Server=localhost;Database=MvcSchoolContext;User Id=sa;Password=Password123;")
-    options.UseSqlServer("Server=(local);Database=SchoolDB;Trusted_Connection=True;TrustServerCertificate=True");
-}
-);
+//builder.Services.AddDbContext<SchoolContext>(options => {
+//    // Working for School DB
+//    options.UseSqlServer("Server=(local);Database=SchoolDB;Trusted_Connection=True;TrustServerCertificate=True");
+//});
 
-/*tejas - end*/
+builder.Services.AddDbContext<UserDbContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase"));
+});
+
+/* tejas - END */
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    //app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
+
+    //app.MapScalarApiReference();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
@@ -41,8 +46,11 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllers();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}"
+//    );
 
 app.Run();
