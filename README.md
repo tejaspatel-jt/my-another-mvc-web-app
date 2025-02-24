@@ -1,5 +1,10 @@
 # my-another-mvc-web-app
 
+## 24feb25_550pm - Create JWT token
+- install package `System.IdentityModel.Tokens.Jwt`.
+- code first migration done again with guid
+- jwt toekn generated.
+- 
 ## 24feb25_136pm - swagger on app's root url
 - swagger is configured to To serve the Swagger UI at the app's root on `https://localhost:7211/`
 - returned success as token in `login` endpoint.

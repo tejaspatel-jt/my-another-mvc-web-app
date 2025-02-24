@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using my_another_mvc_web_app.Entities;
 using my_another_mvc_web_app.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace my_another_mvc_web_app.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(IConfiguration configuration) : ControllerBase
     {
 
         public static User user = new();
@@ -36,7 +40,7 @@ namespace my_another_mvc_web_app.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<User> Login(UserDto userDto)
+        public ActionResult<string> Login(UserDto userDto)
         {
             if(user.Username != userDto.Username)
             {
@@ -50,9 +54,32 @@ namespace my_another_mvc_web_app.Controllers
                 return BadRequest("Invalid Password");
             }
 
-            string token = "Success as a token";
+            string token = CreateToken(user);
 
             return Ok(token);
+        }
+
+        private string CreateToken(User user) {
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.Username)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("AppSettings:Token")!));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
+
+            var tokenDescriptor = new JwtSecurityToken(
+                issuer: configuration.GetValue<string>("AppSettings:Issuer"),
+                audience: configuration.GetValue<string>("AppSettings:Audience"),
+                claims: claims,
+                expires: DateTime.UtcNow.AddDays(1),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
+
         }
     }
 }
