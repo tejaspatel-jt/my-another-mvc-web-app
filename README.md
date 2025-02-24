@@ -126,3 +126,9 @@ In this project, I've implemented a robust API that allows users to interact wit
 - **Documentation:** I've included comprehensive documentation to help users understand how to utilize the API.
 
 I’m eager to receive feedback and suggestions for improvements. Let’s collaborate and make this project even better together! Happy coding!
+
+# ⚠️⚠️choose github account prompt issue ⚠️⚠️
+- due to Multi git account on machine it asks to choose github account to push from/to resolved by setting remote url to specific git
+```
+git remote set-url origin https://tejaspatel-jt@github.com/tejaspatel-jt/my-another-mvc-web-app
+```
