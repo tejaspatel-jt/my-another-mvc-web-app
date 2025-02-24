@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using my_another_mvc_web_app.Models;
 using Scalar.AspNetCore;
 using Microsoft.OpenApi.Models;
-using my_another_mvc_web_app.Data; // Add this using directive
+using my_another_mvc_web_app.Data;
+using my_another_mvc_web_app.Services; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserDbContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("UserDatabase"));
 });
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 /* tejas - END */
 

@@ -1,5 +1,10 @@
 # my-another-mvc-web-app
 
+## 24feb25_621pm - Refactroing with Service Layer
+- create class and interface for auth service and added code from controller to class `AuthService` which is implementing `AuthService`.
+- ran migrations again after deleting `UserDb` from SSMS as some mess happened :).
+
+
 ## 24feb25_550pm - Create JWT token
 - install package `System.IdentityModel.Tokens.Jwt`.
 - code first migration done again with guid
