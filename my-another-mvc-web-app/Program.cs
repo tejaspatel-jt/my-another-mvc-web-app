@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using my_another_mvc_web_app.Models;
+using Scalar.AspNetCore;
+using Microsoft.OpenApi.Models;
+using my_another_mvc_web_app.Data; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 /*tejas - start*/
+
+//builder.Services.AddOpenApi(); // won't work as its only compatible with .net 9+
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SchoolContext>(options => 
 {
