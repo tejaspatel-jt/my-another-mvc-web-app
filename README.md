@@ -1,5 +1,23 @@
 # my-another-mvc-web-app
 
+
+# 21feb25 - Configured Swagger Support in dotnet 8
+actually swagger in this project is messed up as i have used this project for MVC stuff too. :(
+- added `Swashbuckle.AspNetCore` nuget package by
+```
+dotnet add package Swashbuckle.AspNetCore
+```
+- added below thing in `Program.cs` file
+```
+builder.Services.AddSwaggerGen();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+```
+--------------
+
 # 19feb25 - Create and Connect Database in ASP.NET : [YouTube : tutorialsEU - C#](https://youtu.be/ZX12X-ALwGA?si=vb9DmVcJg6-6t21G)
 
 ## Step 1 : Create a new ASP.NET MVC project
