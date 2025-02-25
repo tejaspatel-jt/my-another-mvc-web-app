@@ -1,8 +1,73 @@
 # my-another-mvc-web-app
 
+## 25feb25_230pm - Generating refresh tokens
+- added `RefreshToken` and `RefreshTokenExpiryTime` to `User` model
+    - Run migration using command....
+        - `add-migration "Add Refresh Token" -context UserDbContext`
+    - updated database using command ....
+        - `update-database -context UserDbContext`
+- Added 2 new private funs into `AuthService.cs` file
+```csharp
+private string GenerateRefreshToken()
+{
+    var randomNumber = new byte[32];
+    using var rng = RandomNumberGenerator.Create();
+    rng.GetBytes(randomNumber);
+    return Convert.ToBase64String(randomNumber);
+}
+
+private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
+{
+    var refreshToken = GenerateRefreshToken();
+    user.RefreshToken = refreshToken;
+    user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+    await context.SaveChangesAsync();
+    return refreshToken;
+}
+```
+- Add new model `TokenResponseDto` under models folder
+```csharp
+namespace my_another_mvc_web_app.Models
+{
+    public class TokenResponseDto
+    {
+        public required string AccessToken { get; set; }
+
+        public required string RefreshToken { get; set; }
+    }
+}
+```
+- also updated the return type for `login` endpoint in `AuthController` and before that in `AuthService`.
+- Now if you hit `api/Auth/login` endpoint, you will get `accessToken` and `refreshToken` in response.
+- Add new model `RefreshTokenRequestDto` under models folder
+```csharp
+namespace my_another_mvc_web_app.Models
+{
+    public class RefreshTokenRequestDto
+    {
+        public Guid userId { get; set; }
+
+        public required string RefreshToken { get; set; }
+    }
+}
+```
+- added new endpoint `api/Auth/refresh-token` into `AuthController`.
+```csharp
+[HttpPost("refresh-token")]
+public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto request)
+{
+    var result = await authService.RefreshTokensAsync(request);
+    if (result is null || result.AccessToken is null || result.RefreshToken is null)
+        return Unauthorized("Invalid refresh token.");
+
+    return Ok(result);
+}
+```
+--------------------------
+
 ## 25feb25_107pm - Adding Roles and role based authentication
 - added new endpoint `api/Auth/admin-only` into `AuthController`.
-```
+```csharp
         [Authorize(Roles = "Admin")]
         [HttpGet("admin-only")]
         public IActionResult AdminOnlyEndPoint()
@@ -15,7 +80,7 @@
         - `add-migration "Add User Role" -context UserDbContext`
     - updated database using command ....
         - `update-database -context UserDbContext`
-- Manually added role `Admin` to the user which we can use for logging in        
+- Manually added role `Admin` to the user which we can use for logging In.        
 - new claim added to `CreateToken` fun of `AuthService`.
 ```
 new Claim(ClaimTypes.Role, user.Role)
