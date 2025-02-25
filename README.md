@@ -1,5 +1,28 @@
 # my-another-mvc-web-app
 
+## 25feb25_11am - Securing Endpoints & adding authentication service
+- it can be done using `[Authorize]` attrribute
+- added new package `Microsoft.AspNetCore.Authentication.JwtBearer` with version `7.0.3` and changed the version of `System.IdentityModel.Tokens.Jwt` to `7.0.3` for compatibility.
+- Added authentication service to `Program.cs` like below
+```
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["AppSettings:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["AppSettings:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:Token"]!)),
+            ValidateIssuerSigningKey = true
+        };
+    });
+```
+
+
 ## 24feb25_621pm - Refactroing with Service Layer
 - create class and interface for auth service and added code from controller to class `AuthService` which is implementing `AuthService`.
 - ran migrations again after deleting `UserDb` from SSMS as some mess happened :).

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -20,7 +21,7 @@ namespace my_another_mvc_web_app.Controllers
         public async Task<ActionResult<User>> Register(UserDto userDto)
         {
             var user = await authService.RegisterAsync(userDto);
-            if(user is null)
+            if(user is null) 
                 return BadRequest("Username Already Exists");
 
             return Ok(user);
@@ -34,6 +35,12 @@ namespace my_another_mvc_web_app.Controllers
                 return BadRequest("Invalid Username or Password");
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult AuthenticatedOnlyEndPoint() {
+            return Ok("You are authenticated !");
         }
 
     }
