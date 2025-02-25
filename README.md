@@ -1,6 +1,28 @@
 # my-another-mvc-web-app
 
-## 25feb25_11am - Securing Endpoints & adding authentication service
+## 25feb25_107pm - Adding Roles and role based authentication
+- added new endpoint `api/Auth/admin-only` into `AuthController`.
+```
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+        public IActionResult AdminOnlyEndPoint()
+        {
+            return Ok("You are an ADMIN now..... ");
+        }
+```
+- Added new property `Role` to `User` model.
+    - Run migration using command....
+        - `add-migration "Add User Role" -context UserDbContext`
+    - updated database using command ....
+        - `update-database -context UserDbContext`
+- Manually added role `Admin` to the user which we can use for logging in        
+- new claim added to `CreateToken` fun of `AuthService`.
+```
+new Claim(ClaimTypes.Role, user.Role)
+```
+
+
+## 25feb25_1234pm - Securing Endpoints & adding authentication service
 - it can be done using `[Authorize]` attrribute
 - added new package `Microsoft.AspNetCore.Authentication.JwtBearer` with version `7.0.3` and changed the version of `System.IdentityModel.Tokens.Jwt` to `7.0.3` for compatibility.
 - Added authentication service to `Program.cs` like below

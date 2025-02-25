@@ -43,5 +43,12 @@ namespace my_another_mvc_web_app.Controllers
             return Ok("You are authenticated !");
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+        public IActionResult AdminOnlyEndPoint()
+        {
+            return Ok("You are an ADMIN now..... ");
+        }
+
     }
 }
